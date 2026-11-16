@@ -26,7 +26,8 @@ while True:
             cY = M["m01"] / M["m00"]
 
     if cX > 0:
-        err = 320 - cX        
+        err = 320 - cX   
+        last_err = err
         w = KP * err
         HAL.setV(V)
         HAL.setW(w)
