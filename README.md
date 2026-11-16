@@ -103,7 +103,7 @@ Keep this terminal open while you use the simulator. Closing it (`Ctrl+C`) remov
 ### 3. Run the exercise from the website
 
 1. With the container running, log in to [unibotics.org](https://unibotics.org) and open **Robotics Academy → Follow Line**.
-2. Wait until the website connects to the local backend (`tools_ready`) and select the **Simple Circuit** world.
+2. Wait until the website connects to the local backend.
 3. Paste the contents of one of the controller files (P, PD or PID) into the editor.
 4. Press **Play**. The car starts moving, and the bar under the map shows the percentage of the circuit completed.
 5. To switch controllers, press **Reset**, paste the other code and run it again.
