@@ -332,12 +332,6 @@ The line-recovery behaviour is the same as in the PD controller.
 | Different behaviour between runs | Varying RTF: images arrive with more or less delay relative to the simulation | Compare results with a similar RTF |
 | The car can't be stopped after one lap | `HAL` has no `getPose3d()` in this exercise, so the car's position isn't available | The car keeps running in a continuous loop |
 
-### Possible improvements
-
-- **Anti-windup** for the PID: limit `integral` and reset it when the line is lost.
-- **Pure Pursuit**: aim at a point on the line further ahead (a *lookahead* that grows with the speed) and compute the curvature needed to reach it (`w = v · 2·sin(α) / Ld`). It anticipates curves better than a PID.
-- **Systematic gain tuning** with Ziegler–Nichols as a starting point and Twiddle (coordinate descent) to minimise the lap time.
-
 ---
 
 
