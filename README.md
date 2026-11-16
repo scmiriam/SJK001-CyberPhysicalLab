@@ -297,7 +297,6 @@ The line-recovery behaviour is the same as in the PD controller.
 | `KI` | – | – | 0.000001 |
 | Speed (m/s) | 8.0 (constant) | 8.0 – 28.0 | 8.0 – 32.0 |
 | Line recovery | Yes (turns to last side) | Yes (turns to last side) | Yes (turns to last side) |
-| Oscillations on straights | High | Low | Low |
 | **Lap time (simulated)** | 67.23 s | 33.25 s | **31.35 s** |
 | Improvement over previous | – | −50.5 % | −5.7 % |
 
@@ -314,7 +313,7 @@ The line-recovery behaviour is the same as in the PD controller.
 ### Conclusions
 
 - The **P** controller is enough at low speed but doesn't scale: as soon as it speeds up, it oscillates.
-- The **PD** controller is the biggest improvement: **67.23 s → 33.25 s**, half the lap time. The derivative term removes the oscillations, and adaptive speed lets the car go fast on the straights and slow down in the curves.
+- The **PD** controller is the biggest improvement: **67.23 s → 33.25 s**, half the lap time. The derivative term reduces the oscillations (it does not remove them), and adaptive speed lets the car go fast on the straights and slow down in the curves.
 - The **PID** controller is the fastest (**31.35 s**, about 6 % faster than the PD). The gain is smaller, because the integral term only adds a small correction in long curves, but it lets the car keep a higher top speed.
 - What decides whether the car finishes the lap is **slowing down enough in the tight curves** (`V_MIN`). A car that never loses the line is faster than one that is very fast on the straights but has to recover several times per lap.
 
