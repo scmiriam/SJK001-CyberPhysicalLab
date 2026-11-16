@@ -165,7 +165,7 @@ $$w = K_P \cdot e$$
 
 ```python
 KP = 0.01   # proportional gain
-V  = 2.0    # constant linear speed (m/s)
+V  = 8.0    # constant linear speed (m/s)
 
 err = 320 - cX
 w = KP * err
@@ -173,11 +173,11 @@ HAL.setV(V)
 HAL.setW(w)
 ```
 
-If the car loses the line, instead of stopping, it turns towards the side where it last saw it (given by the sign of last_err) until it finds it again.
+If the car loses the line, instead of stopping, it turns towards the side where it last saw it (given by the sign of `last_err`) until it finds it again.
 
 ### Results and limitations
 
-- At low speed (2 m/s) it **completes the lap**, but slowly: **67.23 s**.
+- At a constant 8 m/s it **completes the lap**, but slowly: **67.23 s**.
 - When the speed goes up, the car **oscillates** around the line (zigzag) and ends up leaving the track in the curves. A P controller only reacts to *where* the line is, not to *how fast* the car is approaching it, so it always arrives with inertia and overshoots.
 - It's a trade-off: with a low `KP` the car goes wide in the curves; with a high `KP` it oscillates on the straights.
 
@@ -258,7 +258,7 @@ $$w = K_P \cdot e_k + K_I \cdot \sum_{j=0}^{k} e_j + K_D \cdot (e_k - e_{k-1})$$
 KP = 0.010
 KD = 0.011
 KI = 0.000001
-V_MAX = 30.0
+V_MAX = 32.0
 V_MIN = 8.0
 
 derivative = err - last_err
@@ -274,7 +274,7 @@ The line-recovery behaviour is the same as in the PD controller.
 ### Results
 
 - **Lap time: 31.35 s**, the fastest of the three.
-- With the same `KP`, `KD` and `V_MIN` as the PD, it allows a higher top speed (`V_MAX = 30` vs 28). The integral term keeps the car better centred in the long curves, so it reaches the tight sections in a better position.
+- With the same `KP`, `KD` and `V_MIN` as the PD, it allows a higher top speed (`V_MAX = 32` vs 28). The integral term keeps the car better centred in the long curves, so it reaches the tight sections in a better position.
 - Note: the integral term has no limit (*anti-windup*) and isn't reset when the line is lost. With this small `KI` it causes no problems, but a larger `KI` would need both.
 
 <p align="center">
@@ -295,8 +295,8 @@ The line-recovery behaviour is the same as in the PD controller.
 | `KP` | 0.01 | 0.010 | 0.010 |
 | `KD` | – | 0.011 | 0.011 |
 | `KI` | – | – | 0.000001 |
-| Speed (m/s) | 2.0 (constant) | 8.0 – 28.0 | 8.0 – 30.0 |
-| Line recovery | No (stops) | Yes (turns to last side) | Yes (turns to last side) |
+| Speed (m/s) | 8.0 (constant) | 8.0 – 28.0 | 8.0 – 32.0 |
+| Line recovery | Yes (turns to last side) | Yes (turns to last side) | Yes (turns to last side) |
 | Oscillations on straights | High | Low | Low |
 | **Lap time (simulated)** | 67.23 s | 33.25 s | **31.35 s** |
 | Improvement over previous | – | −50.5 % | −5.7 % |
