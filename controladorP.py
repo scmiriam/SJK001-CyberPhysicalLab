@@ -8,6 +8,8 @@ V = 8.0
 
 i = 0
 last_err = 0
+err = 0
+w = 0
 while True:
     img = HAL.getImage()
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
