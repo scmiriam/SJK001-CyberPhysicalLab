@@ -173,7 +173,7 @@ HAL.setV(V)
 HAL.setW(w)
 ```
 
-If the line is lost (`cX == 0`), the car stops.
+If the car loses the line, instead of stopping, it turns towards the side where it last saw it (given by the sign of prev_err) until it finds it again.
 
 ### Results and limitations
 
