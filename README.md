@@ -10,9 +10,10 @@ The problem is solved with **three control approaches**, each one building on th
 | **PD** (Proportional-Derivative) | [`controladorPD.py`](controladorPD.py) | Adds a derivative term to damp oscillations, plus adaptive speed | 33.25 s |
 | **PID** (Proportional-Integral-Derivative) | [`controladorPID.py`](controladorPID.py) | Adds an integral term to remove the steady error in long curves | **31.35 s** |
 
-**Main result:** [full lap with the PID controller – 31.35 s](media/PID.webm)
+> Lap times measured on an NVIDIA RTX 5060 setup. Speeds and gains may need
+> re-tuning on other hardware (see [Performance](#performance)).
 
-> *Tip: drag the `.webm` file into the GitHub editor so the video plays inline here.*
+**Main result:** [full lap with the PID controller – 31.35 s](media/PID.webm)
 
 ---
 
@@ -26,8 +27,6 @@ The problem is solved with **three control approaches**, each one building on th
 6. [PID controller](#pid-controller)
 7. [Performance](#performance)
 8. [Problems found and solutions](#problems-found-and-solutions)
-9. [Repository structure](#repository-structure)
-10. [Author](#author)
 
 ---
 
@@ -98,11 +97,8 @@ docker run --rm -it --device /dev/dri --gpus all -p 6080-6090:6080-6090 -p 7163:
 
 You can check that Docker sees the GPU with `docker run --rm --gpus all ubuntu nvidia-smi`.
 
-> **Windows (Docker Desktop + WSL2):** every GPU shows up as a virtual *Microsoft Corporation Device*. If the laptop also has an integrated GPU, you can force the NVIDIA card with `-e MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA`, and check in *Task Manager → Performance* that the NVIDIA GPU shows "3D" usage while the simulation runs.
-
 Keep this terminal open while you use the simulator. Closing it (`Ctrl+C`) removes the container (`--rm`).
 
-> **[SCREENSHOT 3, optional]** The terminal with the container running and the "GPU acceleration info" output.
 
 ### 3. Run the exercise from the website
 
@@ -112,7 +108,15 @@ Keep this terminal open while you use the simulator. Closing it (`Ctrl+C`) remov
 4. Press **Play**. The car starts moving, and the bar under the map shows the percentage of the circuit completed.
 5. To switch controllers, press **Reset**, paste the other code and run it again.
 
-> **Performance note:** the simulation depends heavily on the computer. The *Real Time Factor* (RTF), shown in the bottom bar, is how much simulated time passes per real second. With RTF = 0.5, one simulated second takes two real seconds. **The lap times in this README are simulated time** (the timer in the top-right corner of the map), so they don't depend on the computer. Only the real waiting time does.
+> **Note on the performance:** all lap times were measured on a local
+> Robotics Backend (Docker) running on Ubuntu with an **NVIDIA GeForce RTX 5060**
+> GPU. The simulation's Real Time Factor (RTF) and the controller's loop rate
+> depend on the hardware: on a slower machine, or without GPU acceleration,
+> camera images arrive later relative to the simulation and the car reacts
+> later. **The parameters in this repository, especially the speeds
+> (`V_MAX`, `V_MIN`), were tuned for this setup and may not work on other
+> hardware.** If the car oscillates or leaves the track, start by lowering
+> `V_MAX` and `V_MIN` and then re-tune `KP` and `KD`.
 
 ---
 
@@ -179,6 +183,8 @@ If the line is lost (`cX == 0`), the car stops.
 
 **Video:** [full lap with the P controller – 67.23 s](media/P.webm)
 
+[P.webm](https://github.com/user-attachments/assets/1ba3f82c-9528-485b-84fa-2c20e90cf9f0)
+
 ---
 
 ## [PD controller](controladorPD.py)
@@ -235,6 +241,8 @@ else:
 
 **Video:** [full lap with the PD controller – 33.25 s](media/PD.webm)
 
+[PD.webm](https://github.com/user-attachments/assets/d964409e-dd09-4fd9-bf86-b1e52256d34e)
+
 ---
 
 ## [PID controller](controladorPID.py)
@@ -242,6 +250,7 @@ else:
 ### How it works
 
 An **integral term** is added. It accumulates the error over time: if the car keeps driving slightly to one side, as in a long curve, the integral grows and adds extra steering until the error is corrected.
+
 
 $$w = K_P \cdot e_k + K_I \cdot \sum_{j=0}^{k} e_j + K_D \cdot (e_k - e_{k-1})$$
 
@@ -275,6 +284,8 @@ The line-recovery behaviour is the same as in the PD controller.
 
 **Video:** [full lap with the PID controller – 31.35 s](media/PID.webm)
 
+[PID.webm](https://github.com/user-attachments/assets/6ceb65c9-03ce-449a-ae41-741449f6211d)
+
 ---
 
 ## Performance
@@ -289,6 +300,16 @@ The line-recovery behaviour is the same as in the PD controller.
 | Oscillations on straights | High | Low | Low |
 | **Lap time (simulated)** | 67.23 s | 33.25 s | **31.35 s** |
 | Improvement over previous | – | −50.5 % | −5.7 % |
+
+> **Note on the test environment:** all lap times were measured on a local
+> Robotics Backend (Docker) running on Ubuntu with an **NVIDIA GeForce RTX 5060**
+> GPU. The simulation's Real Time Factor (RTF) and the controller's loop rate
+> depend on the hardware: on a slower machine, or without GPU acceleration,
+> camera images arrive later relative to the simulation and the car reacts
+> later. **The parameters in this repository, especially the speeds
+> (`V_MAX`, `V_MIN`), were tuned for this setup and may not work on other
+> hardware.** If the car oscillates or leaves the track, start by lowering
+> `V_MAX` and `V_MIN` and then re-tune `KP` and `KD`.
 
 ### Conclusions
 
